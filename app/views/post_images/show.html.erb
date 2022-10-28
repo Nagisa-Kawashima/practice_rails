@@ -1,0 +1,59 @@
+<div>
+    <h1>マイページ</h1>
+    <div>
+        投稿した画像<%= image_tag @post_image.get_image, size: '200x200'%>
+    </div>
+        <p>ショップ名<%= @post_image.shop_name %></p>
+        <p>説明<%= @post_image.caption%></p>
+        <p>ユーザーの顔写真 <%= image_tag 'sample-author1.jpg', width: '10%', height: '10%'%></p>
+        <p>ユーザーの名前<%= @post_image.user.name %></p>
+        <p>投稿日 <%= @post_image.created_at.strftime("%Y年%m月%d日") %></p>
+        <p>
+        <% if @post_image.user_id == current_user.id %>
+            <%= link_to "削除", post_image_path(@post_image), method: :delete, data: { confirm: "【確認】投稿した履歴を削除してもよろしいですか？" }%>
+        <% end %>
+        </p>  
+        <% if @post_image.favorited_by?(current_user) %>
+        <p>
+        <%= link_to post_image_favorites_path(@post_image), method: :delete do %>
+            ♥<%= @post_image.favorites.count %> いいね
+        <% end %>
+        </p>
+        <% else %>
+        <p>
+        <%= link_to post_image_favorites_path(@post_image), method: :post do %>
+            ♡<%= @post_image.favorites.count %> いいね
+        <% end %>
+        </p>
+        <% end %>
+</div>
+<div>
+    <h1>コメント一覧</h1>
+    <p>コメント件数<%= @post_image.post_comments.count %></p>
+    <% @post_image.post_comments.each do |post_comment| %>
+        <p>ユーザーの顔写真<%= image_tag post_comment.user.get_profile_image, size: "100x100" %></p>
+        <p>ユーザーの名前<%= post_comment.user.name %></p>
+        <p>投稿日<%= post_comment.created_at.strftime('%Y/%m/%d') %></p>
+        <p>コメント<%= post_comment.comment %></p>
+        <% if post_comment.user_id == current_user.id %>
+            <%= link_to "delete",  post_image_post_comment_path(post_comment.post_image_id, post_comment.id), method: :delete, data: { confirm: "【確認】投稿した履歴を削除してもよろしいですか？" } %>
+        <% end %>
+    <% end %>
+    
+
+
+
+
+
+        
+    
+</div>
+
+<div>
+    <h1>コメント投稿できるよ</h1>
+    <%= form_with model: [@post_image, @post_comment] do |f| %>
+    <%= f.text_area :comment, rows: "5", placeholder: "コメント入れてね " %>
+    <%= f.submit "send" %>
+    <% end %>
+    
+</div>

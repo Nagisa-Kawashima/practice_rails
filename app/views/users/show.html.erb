@@ -1,0 +1,25 @@
+<div>
+    <h1>ユーザーの詳細</h1>
+    <h3>ユーザーの名前<%= @user.name %></h3>
+    <h3>ユーザーの顔写真<%= image_tag @user.get_profile_image, size: "100x100" %></h3>
+    <h3><%= link_to "プロフィール編集", edit_user_path(@user) %></h3>
+</div>
+<% @post_images.each do |post_image| %>
+<div>
+<h1>ユーザーの投稿したデータ一覧</h1>
+<p>投稿した画像
+<%= link_to post_image_path(post_image)  do %>
+    <%= image_tag post_image.get_image, size: "200x200"%>
+
+<% end %>
+</p>
+<p>お店の名前<%= post_image.shop_name %></p>
+<p>説明<%= post_image.caption %></p>
+<p>ユーザーの名前<%= post_image.user.name %></p>
+<p>ユーザーの顔写真 <%= image_tag post_image.user.get_profile_image, size: "100x100" %></p>
+</div>
+<% end %>
+
+<%= paginate @post_images %>
+
+
